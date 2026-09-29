@@ -1,0 +1,40 @@
+package {{ base_package }}.service;
+
+import {{ base_package }}.entity.{{ entity.class_name }};
+import java.util.List;
+import java.util.Optional;
+{% if entity.pk_import %}
+import {{ entity.pk_import }};
+{% endif %}
+
+/**
+ * Contrato de negocio para la entidad {@link {{ entity.class_name }}}.
+ * Generado automáticamente por ER Diagram Tool.
+ */
+public interface I{{ entity.class_name }}Service {
+
+    /**
+     * Obtiene todos los registros de {{ entity.class_name }}.
+     */
+    List<{{ entity.class_name }}> findAll();
+
+    /**
+     * Busca un registro por su clave primaria.
+     */
+    Optional<{{ entity.class_name }}> findById({{ entity.pk_java_type }} id);
+
+    /**
+     * Crea o actualiza un registro.
+     */
+    {{ entity.class_name }} save({{ entity.class_name }} entity);
+
+    /**
+     * Elimina un registro por su clave primaria.
+     */
+    void deleteById({{ entity.pk_java_type }} id);
+
+    /**
+     * Verifica si existe un registro con la clave dada.
+     */
+    boolean existsById({{ entity.pk_java_type }} id);
+}

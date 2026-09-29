@@ -1,0 +1,59 @@
+package {{ base_package }}.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import java.io.Serializable;
+{% if entity.has_temporal_fields %}
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+{% endif %}
+{% if entity.has_uuid_fields %}
+import java.util.UUID;
+{% endif %}
+{% if entity.has_big_decimal %}
+import java.math.BigDecimal;
+{% endif %}
+
+/**
+ * Entidad JPA: {{ entity.nombre }}
+ * Generada automáticamente por ER Diagram Tool.
+ * Tabla destino: {{ entity.nombre | lower }}
+ */
+@Entity
+@Table(name = "{{ entity.nombre | lower }}")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+public class {{ entity.class_name }} implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+{% for attr in entity.atributos %}
+{% if attr.es_pk %}
+    @Id
+    @GeneratedValue(strategy = GenerationType.{{ attr.generation_strategy }})
+    @Column(name = "{{ attr.nombre | lower }}", nullable = false, updatable = false)
+    private {{ attr.java_type }} {{ attr.field_name }};
+
+{% elif attr.es_fk %}
+    // Clave foránea — considera añadir @ManyToOne si la entidad relacionada existe
+    @Column(name = "{{ attr.nombre | lower }}")
+    private {{ attr.java_type }} {{ attr.field_name }};
+
+{% else %}
+    @Column(name = "{{ attr.nombre | lower }}"{% if not attr.nullable %}, nullable = false{% endif %})
+{% if attr.java_type == "String" and attr.max_length %}
+    @Size(max = {{ attr.max_length }})
+{% endif %}
+{% if not attr.nullable %}
+    @NotNull
+{% endif %}
+    private {{ attr.java_type }} {{ attr.field_name }};
+
+{% endif %}
+{% endfor %}
+}

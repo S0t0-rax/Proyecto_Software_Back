@@ -1,0 +1,30 @@
+package {{ base_package }}.repository;
+
+import {{ base_package }}.entity.{{ entity.class_name }};
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+{% if entity.pk_java_type %}
+import {{ entity.pk_import }};
+{% endif %}
+
+/**
+ * Repositorio Spring Data JPA para {@link {{ entity.class_name }}}.
+ * Generado automáticamente por ER Diagram Tool.
+ * <p>
+ * Hereda automáticamente: findById, findAll, save, deleteById, count, etc.
+ */
+@Repository
+public interface {{ entity.class_name }}Repository extends JpaRepository<{{ entity.class_name }}, {{ entity.pk_java_type }}> {
+
+{% for attr in entity.atributos if not attr.es_pk %}
+{% if attr.java_type == "String" %}
+    /**
+     * Busca registros donde {@code {{ attr.field_name }}} contenga el valor dado (case-insensitive).
+     */
+    List<{{ entity.class_name }}> findBy{{ attr.field_name | capitalize }}ContainingIgnoreCase(String {{ attr.field_name }});
+
+{% endif %}
+{% endfor %}
+}

@@ -1,0 +1,25 @@
+# ── Core Framework ────────────────────────────────────────────────────────────
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+
+# ── Database ──────────────────────────────────────────────────────────────────
+sqlalchemy==2.0.30
+psycopg2-binary==2.9.9
+alembic==1.13.1          # Migraciones de esquema
+
+# ── Supabase Client ───────────────────────────────────────────────────────────
+supabase==2.4.6
+
+# ── WebSockets ────────────────────────────────────────────────────────────────
+websockets==12.0
+
+# ── Templating (Jinja2 para generación de código Spring Boot) ─────────────────
+jinja2==3.1.4
+
+# ── Environment & Config ──────────────────────────────────────────────────────
+python-dotenv==1.0.1
+pydantic-settings==2.2.1  # Settings tipadas con Pydantic v2
+
+# ── Utils ─────────────────────────────────────────────────────────────────────
+python-multipart==0.0.9   # Soporte para form-data / file uploads
+httpx==0.27.0             # Cliente HTTP async (útil para integraciones)

@@ -1,0 +1,88 @@
+package {{ base_package }}.controller;
+
+import {{ base_package }}.entity.{{ entity.class_name }};
+import {{ base_package }}.service.I{{ entity.class_name }}Service;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+{% if entity.pk_import %}
+import {{ entity.pk_import }};
+{% endif %}
+
+/**
+ * REST Controller para la entidad {@link {{ entity.class_name }}}.
+ * Generado automáticamente por ER Diagram Tool.
+ *
+ * <p>Base URL: /api/{{ entity.nombre | lower }}s
+ */
+@Slf4j
+@RestController
+@RequestMapping("/api/{{ entity.nombre | lower }}s")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
+public class {{ entity.class_name }}Controller {
+
+    private final I{{ entity.class_name }}Service {{ entity.field_name }}Service;
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // GET /api/{{ entity.nombre | lower }}s
+    // ─────────────────────────────────────────────────────────────────────────
+    @GetMapping
+    public ResponseEntity<List<{{ entity.class_name }}>> findAll() {
+        log.info("GET /api/{{ entity.nombre | lower }}s");
+        List<{{ entity.class_name }}> result = {{ entity.field_name }}Service.findAll();
+        return ResponseEntity.ok(result);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // GET /api/{{ entity.nombre | lower }}s/{id}
+    // ─────────────────────────────────────────────────────────────────────────
+    @GetMapping("/{id}")
+    public ResponseEntity<{{ entity.class_name }}> findById(@PathVariable {{ entity.pk_java_type }} id) {
+        log.info("GET /api/{{ entity.nombre | lower }}s/{}", id);
+        return {{ entity.field_name }}Service.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "{{ entity.class_name }} con id=" + id + " no encontrado"));
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // POST /api/{{ entity.nombre | lower }}s
+    // ─────────────────────────────────────────────────────────────────────────
+    @PostMapping
+    public ResponseEntity<{{ entity.class_name }}> create(@Valid @RequestBody {{ entity.class_name }} entity) {
+        log.info("POST /api/{{ entity.nombre | lower }}s body={}", entity);
+        {{ entity.class_name }} saved = {{ entity.field_name }}Service.save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // PUT /api/{{ entity.nombre | lower }}s/{id}
+    // ─────────────────────────────────────────────────────────────────────────
+    @PutMapping("/{id}")
+    public ResponseEntity<{{ entity.class_name }}> update(
+            @PathVariable {{ entity.pk_java_type }} id,
+            @Valid @RequestBody {{ entity.class_name }} entity) {
+        log.info("PUT /api/{{ entity.nombre | lower }}s/{}", id);
+        if (!{{ entity.field_name }}Service.existsById(id)) {
+            throw new EntityNotFoundException("{{ entity.class_name }} con id=" + id + " no encontrado");
+        }
+        {{ entity.class_name }} updated = {{ entity.field_name }}Service.save(entity);
+        return ResponseEntity.ok(updated);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // DELETE /api/{{ entity.nombre | lower }}s/{id}
+    // ─────────────────────────────────────────────────────────────────────────
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable {{ entity.pk_java_type }} id) {
+        log.warn("DELETE /api/{{ entity.nombre | lower }}s/{}", id);
+        {{ entity.field_name }}Service.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+}

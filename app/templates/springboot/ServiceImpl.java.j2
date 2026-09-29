@@ -1,0 +1,66 @@
+package {{ base_package }}.service.impl;
+
+import {{ base_package }}.entity.{{ entity.class_name }};
+import {{ base_package }}.repository.{{ entity.class_name }}Repository;
+import {{ base_package }}.service.I{{ entity.class_name }}Service;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.Optional;
+{% if entity.pk_import %}
+import {{ entity.pk_import }};
+{% endif %}
+
+/**
+ * Implementación de {@link I{{ entity.class_name }}Service}.
+ * Generado automáticamente por ER Diagram Tool.
+ *
+ * <p>Aplica el patrón: Controller → Service → Repository → Entity (4 capas MVC).
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class {{ entity.class_name }}ServiceImpl implements I{{ entity.class_name }}Service {
+
+    private final {{ entity.class_name }}Repository {{ entity.field_name }}Repository;
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<{{ entity.class_name }}> findAll() {
+        log.debug("Obteniendo todos los registros de {{ entity.class_name }}");
+        return {{ entity.field_name }}Repository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<{{ entity.class_name }}> findById({{ entity.pk_java_type }} id) {
+        log.debug("Buscando {{ entity.class_name }} con id={}", id);
+        return {{ entity.field_name }}Repository.findById(id);
+    }
+
+    @Override
+    public {{ entity.class_name }} save({{ entity.class_name }} entity) {
+        log.info("Guardando {{ entity.class_name }}: {}", entity);
+        return {{ entity.field_name }}Repository.save(entity);
+    }
+
+    @Override
+    public void deleteById({{ entity.pk_java_type }} id) {
+        log.warn("Eliminando {{ entity.class_name }} con id={}", id);
+        if (!{{ entity.field_name }}Repository.existsById(id)) {
+            throw new jakarta.persistence.EntityNotFoundException(
+                "{{ entity.class_name }} con id=" + id + " no encontrado"
+            );
+        }
+        {{ entity.field_name }}Repository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean existsById({{ entity.pk_java_type }} id) {
+        return {{ entity.field_name }}Repository.existsById(id);
+    }
+}
