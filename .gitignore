@@ -1,0 +1,11 @@
+# Ambientes virtuales
+venv/
+env/
+__pycache__/
+
+# Variables de entorno (¡NUNCA SUBIR!)
+.env
+
+# Bases de datos locales
+*.db
+er_diagram_demo.db
